@@ -1,0 +1,34 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+  output   = "../src/generated/prisma"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model Configuration {
+  key   String @id
+  value String
+}
+
+model Job {
+  id           String    @id @default(uuid())
+  command      String
+  state        String    @default("pending")
+  priority     Int       @default(0) // Higher number = higher priority
+  attempts     Int       @default(0)
+  max_retries  Int
+  timeout      Int? // Timeout in seconds (null = no timeout)
+  output       String?
+  next_run_at  DateTime  @default(now())
+  started_at   DateTime? // When job actually started processing
+  completed_at DateTime? // When job finished (success or failure)
+  duration     Int? // Duration in milliseconds
+  created_at   DateTime  @default(now())
+  updated_at   DateTime  @updatedAt
+}
