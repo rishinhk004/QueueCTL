@@ -2,8 +2,9 @@ import { prisma } from '../lib/db.js';
 
 export async function viewJobOutput(jobId: string) {
   try {
-    const job = await prisma.job.findUnique({
-      where: { id: jobId },
+    // Support partial ID matching (for the truncated IDs shown in list)
+    const job = await prisma.job.findFirst({
+      where: { id: { startsWith: jobId } },
     });
 
     if (!job) {

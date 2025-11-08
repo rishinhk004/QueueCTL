@@ -8,8 +8,12 @@ export async function listDlq() {
 
 export async function retryDlqJob(jobId: string) {
   try {
+    // Support partial ID matching (for the truncated IDs shown in list)
     const job = await prisma.job.findFirst({
-      where: { id: jobId, state: JobState.DEAD },
+      where: { 
+        id: { startsWith: jobId },
+        state: JobState.DEAD 
+      },
     });
 
     if (!job) {
@@ -18,7 +22,7 @@ export async function retryDlqJob(jobId: string) {
     }
 
     await prisma.job.update({
-      where: { id: jobId },
+      where: { id: job.id },
       data: {
         state: JobState.PENDING,
         attempts: 0,
@@ -26,7 +30,7 @@ export async function retryDlqJob(jobId: string) {
       },
     });
 
-    console.log(`Job ${jobId} moved from DLQ to 'pending' queue.`);
+    console.log(`Job ${job.id.substring(0, 8)} moved from DLQ to 'pending' queue.`);
   } catch (e) {
     console.error(`Error retrying job ${jobId}:`, e);
   } finally {
