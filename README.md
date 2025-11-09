@@ -21,6 +21,14 @@ A robust CLI-based background job queue system with retry logic, exponential bac
 
 ---
 
+## Demo Video
+
+**[Watch the CLI Demo](https://drive.google.com/file/d/14wdb7y16OxV9tbYmZ6ty59C6ixx_ZZ4K/view?usp=sharing)**
+
+A working demonstration of all QueueCTL features including configuration, job enqueuing, worker management, priority queues, timeouts, scheduled jobs, and monitoring.
+
+---
+
 ## 1. Setup Instructions
 
 ### Prerequisites
